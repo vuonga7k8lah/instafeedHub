@@ -8,12 +8,13 @@ final class InstaFeedHubController
 {
     const SCOPES = 'user_profile,user_media';
     const FBAPI  = 'https://api.instagram.com/oauth/authorize/';
-    public static $configInsta = [
+    private static $configInsta
+        = [
             'clientId'     => 140642897910557,
             'clientSecret' => '8bdb356cf99792a6b82620d6df541f8c',
             'redirectUri'  => 'https://dfecea3b4c16.ngrok.io/wiloke/'
         ];
-    private static $aDataUser;
+    private static $aDataUser=[];
 
     /**
      * @return string
@@ -57,10 +58,10 @@ final class InstaFeedHubController
             'httpversion' => '1.0',
             'blocking'    => true,
             'body'        => [
-                'client_id'     => client_id,
-                'client_secret' => client_secret,
+                'client_id'     => self::$configInsta['clientId'],
+                'client_secret' => self::$configInsta['clientSecret'],
                 'grant_type'    => 'authorization_code',
-                'redirect_uri'  => redirect_uri,
+                'redirect_uri'  => self::$configInsta['redirectUri'],
                 'code'          => $fbResponseCode
             ]
         ]);
@@ -77,10 +78,27 @@ final class InstaFeedHubController
     }
 
     /**
+     * @return array
+     */
+    public static function getInfo(): array
+    {
+        return self::$configInsta;
+    }
+
+    /**
+     * @param string $accessToken
+     * @return array|mixed|string
+     */
+    public static function getRefreshToken(string $accessToken)
+    {
+        return self::_getRefreshToken($accessToken);
+    }
+
+    /**
      * @param string $accessToken
      * @return array|string
      */
-    public static function getRefreshToken(string $accessToken)
+    private static function _getRefreshToken(string $accessToken)
     {
         $aResponse = wp_remote_get(
             add_query_arg(

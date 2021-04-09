@@ -17,8 +17,8 @@ class MenuController
     public function registerMenu()
     {
         add_menu_page(
-            'Wiloke InstaFeedHub Setting',
-            'Wiloke InstaFeedHub Setting',
+            esc_html__('Wiloke InstaFeedHub Setting',ESC_HTML_TEXT_DOMAIN),
+            esc_html__('Wiloke InstaFeedHub Setting',ESC_HTML_TEXT_DOMAIN),
             'administrator',
             $this->slug,
             [$this, 'settings']
